@@ -1,4 +1,4 @@
-Dtaset: AF Classification from a Short Single Lead ECG Recording: The PhysioNet/Computing in Cardiology Challenge 2017
+Dataset: AF Classification from a Short Single Lead ECG Recording: The PhysioNet/Computing in Cardiology Challenge 2017
 
 Obtained from : https://physionet.org/content/challenge-2017/1.0.0/
 
