@@ -95,7 +95,7 @@ def get_files_list(parent_dir):
     for f in listdir(parent_dir):
         # append signal file
         if path.isfile(path.join(parent_dir, f)) and not f.endswith(".csv"):
-            files_list.append(parents_dir + "\\" + f)
+            files_list.append(parent_dir + "\\" + f)
         # get files from dirs
         elif path.isdir:
             files_list.extend(get_files_list(parent_dir + "\\" + f))
