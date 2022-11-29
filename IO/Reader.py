@@ -1,19 +1,30 @@
+from os import chdir, getcwd, path, listdir
+import sys
+
+sys.path.append(getcwd())
+
 import pandas as pd
 import numpy as np
 import wfdb
-import os
-
-import Data.Datasets.CardiologyChallenge.training as cardiology_challenge_raw_data_training
-import Data.Datasets.CardiologyChallenge.validation as cardiology_challenge_raw_data_validation
 from Data import SignalDataset
 
 
 def extract_cardiology_challenge_dataset(mix_training_and_vaidation_datasets=True):
+    """
+    Returns whole SignalDataset or original training and validation sets separetly
+    Return:
+        SignalDataset: if mix_training_and_vaidation_datasets
+        (SignalDataset, SignalDataset): if !mix_training_and_vaidation_datasets
+    """
     sample_rate = 300
 
-    training_labels_csv = "Data/Datasets/CardioogyChallenge/training/REFERENCE-v3.csv"
+    print(getcwd())
+
+    training_labels_csv = (
+        getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\training\\REFERENCE-v3.csv"
+    )
     validation_labels_csv = (
-        "Data/Datasets/CardioogyChallenge/validation/REFERENCE-v3.csv"
+        getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\validation\\REFERENCE-v3.csv"
     )
     Y_training_df = pd.read_csv(training_labels_csv, header=None)
     Y_validation_df = pd.read_csv(validation_labels_csv, header=None)
@@ -48,24 +59,21 @@ def get_labels_and_patient_ids(metadata_df):
     patient_ids = np.empty(len(metadata_df), dtype="U25")
 
     # patient is the ecg_id - 1
-    for patient in range(len(metadata_df)):
-        patient_ids[0] = metadata_df[0][patient]  # Id
+    for i in range(len(metadata_df)):
+        patient_ids[i] = metadata_df[0][i]  # patient ID
 
-        if "A" == metadata_df[1][patient]:
+        if "A" == metadata_df[1][i]:
             # this patient has AF
-            labels[patient] = 1
-            afCount += 1
-        elif "N" == metadata_df[1][patient]:
+            labels[i] = 1
+        elif "N" == metadata_df[1][i]:
             # this record is normal
-            labels[patient] = 0
-            normCount += 1
-        elif "~" == metadata_df[1][patient]:
+            labels[i] = 0
+        elif "~" == metadata_df[1][i]:
             # this record is noisy
-            labels[patient] = 2
-            normCount += 1
+            labels[i] = 2
         else:
             # this patient isn't norm or AF or noisy
-            labels[patient] = -1
+            labels[i] = -1
 
     # create empty numpy arr to hold only norm and AF records
     clean_labels = []
@@ -81,33 +89,41 @@ def get_labels_and_patient_ids(metadata_df):
     return clean_labels, clean_patient_ids
 
 
-def get_files_list(parent_module):
-    files_list = [
-        f
-        for f in os.listdir(parent_module)
-        if os.path.isfile(os.path.join(parent_module, f)) and not f.endswith(".csv")
-    ]
+def get_files_list(parent_dir):
+    files_list = []
+
+    for f in listdir(parent_dir):
+        # append signal file
+        if path.isfile(path.join(parent_dir, f)) and not f.endswith(".csv"):
+            files_list.append(parents_dir + "\\" + f)
+        # get files from dirs
+        elif path.isdir:
+            files_list.extend(get_files_list(parent_dir + "\\" + f))
+
     return files_list
 
 
 def get_raw_data():
-    training_files_list = get_files_list(cardiology_challenge_raw_data_training)
-    validation_files_list = get_files_list(cardiology_challenge_raw_data_validation)
+    training_dir = getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\training"
+    validation_dir = getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\training"
+
+    training_files_list = get_files_list(training_dir)
+    validation_files_list = get_files_list(validation_dir)
 
     training_raw_data = extract_raw_data_from_WFDB_files(
-        cardiology_challenge_raw_data_training, training_files_list
+        training_dir, training_files_list
     )
     validation_raw_data = extract_raw_data_from_WFDB_files(
-        cardiology_challenge_raw_data_validation, validation_files_list
+        validation_dir, validation_files_list
     )
 
     return training_raw_data, validation_raw_data
 
 
-def extract_raw_data_from_WFDB_files(dir_path, files_list):
+def extract_raw_data_from_WFDB_files(files_list):
     raw_signals_list = []
     for i in range(len(files_list)):
-        current_record = dir_path + files_list[i]
+        current_record = files_list[i]
         sig, fields = wfdb.rdsamp(current_record)
 
         # make signal file 1D
