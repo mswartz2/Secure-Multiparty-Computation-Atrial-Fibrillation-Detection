@@ -24,13 +24,6 @@ complete_signal_data_set = Reader.extract_cardiology_challenge_dataset(
     combine_training_and_vaidation_datasets=False
 )
 
-# combined_sets = Reader.extract_cardiology_challenge_dataset(
-#     combine_training_and_vaidation_datasets=False
-# )
-
-# original_training_data_set = combined_sets[0]
-# original_validation_data_set = combined_sets[1]
-
 # write data to pickle files
 save_data_folder = getcwd() + "\\Data\\PickleFiles\\CardiologyChallenge\\"
 
