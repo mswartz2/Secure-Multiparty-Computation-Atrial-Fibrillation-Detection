@@ -29,12 +29,12 @@ def extract_cardiology_challenge_dataset(mix_training_and_vaidation_datasets=Tru
     Y_training_df = pd.read_csv(training_labels_csv, header=None)
     Y_validation_df = pd.read_csv(validation_labels_csv, header=None)
 
-    training_labels, training_patient_ids = get_labels_and_patient_ids(Y_training_df)
-    validation_labels, validation_patient_ids = get_labels_and_patient_ids(
+    training_labels, training_patient_ids = _get_labels_and_patient_ids(Y_training_df)
+    validation_labels, validation_patient_ids = _get_labels_and_patient_ids(
         Y_validation_df
     )
 
-    training_raw_data, validation_raw_data = get_raw_data()
+    training_raw_data, validation_raw_data = _get_raw_data()
 
     training_signal_data_set = SignalDataset(
         training_raw_data, training_labels, training_patient_ids
@@ -54,7 +54,7 @@ def extract_cardiology_challenge_dataset(mix_training_and_vaidation_datasets=Tru
         return training_signal_data_set, validation_signal_data_set
 
 
-def get_labels_and_patient_ids(metadata_df):
+def _get_labels_and_patient_ids(metadata_df):
     labels = np.zeros(len(metadata_df), dtype=int)
     patient_ids = np.empty(len(metadata_df), dtype="U25")
 
@@ -89,38 +89,35 @@ def get_labels_and_patient_ids(metadata_df):
     return clean_labels, clean_patient_ids
 
 
-def get_files_list(parent_dir):
+def _get_files_list(parent_dir):
     files_list = []
 
     for f in listdir(parent_dir):
         # append signal file
-        if path.isfile(path.join(parent_dir, f)) and not f.endswith(".csv"):
-            files_list.append(parent_dir + "\\" + f)
+        if path.isfile(path.join(parent_dir, f)):
+            if f.endswith(".hea"):
+                files_list.append(parent_dir + "\\" + f.split(".")[0])
         # get files from dirs
         elif path.isdir:
-            files_list.extend(get_files_list(parent_dir + "\\" + f))
+            files_list.extend(_get_files_list(parent_dir + "\\" + f))
 
     return files_list
 
 
-def get_raw_data():
+def _get_raw_data():
     training_dir = getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\training"
     validation_dir = getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\training"
 
-    training_files_list = get_files_list(training_dir)
-    validation_files_list = get_files_list(validation_dir)
+    training_files_list = _get_files_list(training_dir)
+    validation_files_list = _get_files_list(validation_dir)
 
-    training_raw_data = extract_raw_data_from_WFDB_files(
-        training_dir, training_files_list
-    )
-    validation_raw_data = extract_raw_data_from_WFDB_files(
-        validation_dir, validation_files_list
-    )
+    training_raw_data = _extract_raw_data_from_WFDB_files(training_files_list)
+    validation_raw_data = _extract_raw_data_from_WFDB_files(validation_files_list)
 
     return training_raw_data, validation_raw_data
 
 
-def extract_raw_data_from_WFDB_files(files_list):
+def _extract_raw_data_from_WFDB_files(files_list):
     raw_signals_list = []
     for i in range(len(files_list)):
         current_record = files_list[i]
