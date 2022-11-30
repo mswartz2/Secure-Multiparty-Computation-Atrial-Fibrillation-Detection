@@ -6,19 +6,16 @@ sys.path.append(getcwd())
 import pandas as pd
 import numpy as np
 import wfdb
-from Data import SignalDataset
+from Data.SignalDataset import SignalDataset
 
 
-def extract_cardiology_challenge_dataset(mix_training_and_vaidation_datasets=True):
+def extract_cardiology_challenge_dataset(combine_training_and_vaidation_datasets=True):
     """
     Returns whole SignalDataset or original training and validation sets separetly
     Return:
         SignalDataset: if mix_training_and_vaidation_datasets
-        (SignalDataset, SignalDataset): if !mix_training_and_vaidation_datasets
+        [SignalDataset, SignalDataset]: if !mix_training_and_vaidation_datasets
     """
-    sample_rate = 300
-
-    print(getcwd())
 
     training_labels_csv = (
         getcwd() + "\\Data\\Datasets\\CardiologyChallenge\\training\\REFERENCE-v3.csv"
@@ -48,7 +45,7 @@ def extract_cardiology_challenge_dataset(mix_training_and_vaidation_datasets=Tru
         training_patient_ids + validation_patient_ids,
     )
 
-    if not mix_training_and_vaidation_datasets:
+    if combine_training_and_vaidation_datasets:
         return both_signal_data_set
     else:
         return training_signal_data_set, validation_signal_data_set
