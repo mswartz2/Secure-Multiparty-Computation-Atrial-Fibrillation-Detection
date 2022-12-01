@@ -25,7 +25,7 @@ complete_signal_data_set = Reader.extract_cardiology_challenge_dataset(
 )
 
 # write data to pickle files
-save_data_folder = getcwd() + "\\Data\\PickleFiles\\CardiologyChallenge\\"
+save_data_folder = getcwd() + "\\Data\\PickleFiles\\CardiologyChallenge\\Raw\\"
 
 PickleFileUtils.write_to_pickle_file(
     complete_signal_data_set, save_data_folder + "CompleteDataSet.pickle"

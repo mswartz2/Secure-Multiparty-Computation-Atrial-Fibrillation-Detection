@@ -1,24 +1,24 @@
 To do list
 
 General Python:
-1. Add logger to everthing
-2. Refactor preprocessing and make pickle files for it
-3. Refactor feature extraction and make pickle files for it
-4. Refactor graphing
-5. Add something to reject record if it is too noisy
-5. Shuffle data and save data folds
-6. Train 10 models and save as pickle files
+- Add logger to everthing
+- Refactor graphing
+- Add something to reject record if it is too noisy
+- Shuffle data and save data folds
+- Train 10 models and save as pickle files
+- Add comments to everything
+- Set up params
 
 
 GNS3 Prep:
-1. Get TCP communication working
-2. Get HTTP communication working
-3. Set up scipts with params for different experiments
+- Get TCP communication working
+- Get HTTP communication working
+- Set up scipts with params for different experiments
 
 GNS3:
-1. Get files loaded in to docker container
-2. Set up basic environment with clients, server, orchestrator
-3. Run experiments
+- Get files loaded in to docker container
+- Set up basic environment with clients, server, orchestrator
+- Run experiments
     - With original train/test data
         - Preprocessing & feature extraction at client
         - Preprocessing & feature extraction at server
@@ -26,7 +26,8 @@ GNS3:
         - Preprocessing & feature extraction at client
         - Preprocessing & feature extraction at server
 
-possibly Later:
-1. Different noise reduction techniques
-2. Improve feature extraction
+
+Possibly Later:
+- Different noise reduction techniques
+- Improve feature extraction
 

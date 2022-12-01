@@ -11,20 +11,20 @@ from Utils import PickleFileUtils
 # NOTES:
 
 # Read in raw data pickles
-save_data_folder = getcwd() + "\\Data\\PickleFiles\\CardiologyChallenge\\"
+raw_data_pickles_folder = getcwd() + "\\Data\\PickleFiles\\CardiologyChallenge\\Raw\\"
 
 complete_signal_data_set = PickleFileUtils.read_in_pickle_file(
-    save_data_folder + "CompleteDataSet"
+    raw_data_pickles_folder + "CompleteDataSet.pickle"
 )
-# original_training_data_set = PickleFileUtils.read_in_pickle_file(
-#     save_data_folder + "OriginalTrainingDataSet"
-# )
-# original_validation_data_set = PickleFileUtils.read_in_pickle_file(
-#     save_data_folder + "OriginalValidationDataSet"
-# )
+original_training_data_set = PickleFileUtils.read_in_pickle_file(
+    raw_data_pickles_folder + "OriginalTrainingDataSet.pickle"
+)
+original_validation_data_set = PickleFileUtils.read_in_pickle_file(
+    raw_data_pickles_folder + "OriginalValidationDataSet.pickle"
+)
 
 
-# Cut data in to 10 folds
+# Cut shuffled data in to 10 folds
 folds = []
 
 # Save 10 folds
